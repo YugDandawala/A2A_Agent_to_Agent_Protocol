@@ -1,0 +1,15 @@
+[project]
+name = "a2a-protocol"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "a2a-sdk[http-server]>=0.3.22",
+    "langchain>=1.2.7",
+    "langchain-core>=1.2.7",
+    "langchain-google-genai>=4.2.0",
+    "langchain-ollama>=1.0.1",
+    "langgraph>=1.0.7",
+    "uvicorn>=0.40.0",
+]
