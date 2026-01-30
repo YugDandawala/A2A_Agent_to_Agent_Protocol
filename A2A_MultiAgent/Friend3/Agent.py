@@ -5,7 +5,7 @@ from langchain_core.messages import HumanMessage
 
 llm = ChatGoogleGenerativeAI(
     model="Gemini 2.5 Flash Lite",
-    google_api_key="key",
+    google_api_key="KEY",
     temperature=0.4,
 )
 
@@ -26,7 +26,7 @@ Write an essay based on the outlines below:
 async def rate_essay(state: State):
     prompt = f"""
 Rate the essay out of 10.
-Return a number only
+Return a number only.
 ESSAY:
 {state['essay']}
 """
