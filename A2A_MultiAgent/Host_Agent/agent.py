@@ -17,7 +17,7 @@ from a2a.types import SendMessageRequest, MessageSendParams
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-flash-latest",
-    google_api_key="AIzaSyCgpXQGnJjpVwNHqot4GUa5Ho2n5PcfITc",
+    google_api_key="key",
     temperature=0.1,
 )
 
@@ -95,7 +95,7 @@ ESSAY:
 async def rate_insights(state: HostState):
     prompt = f"""
 Rate the quality of these insights out of 10.
-Example(8 out of 10,8/10)
+Return a Number only
 
 INSIGHTS:
 {state['insights']}
