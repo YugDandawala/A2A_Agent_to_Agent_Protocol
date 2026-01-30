@@ -2,11 +2,15 @@ from typing import TypedDict
 from langgraph.graph import StateGraph, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+api_key = os.getenv("GOOGLE_API_KEY")
 llm = ChatGoogleGenerativeAI(
-    model="Gemini 2.5 Flash Lite",
-    google_api_key="KEY",
-    temperature=0.4,
+    model = "gemini-flash-latest",
+    google_api_key = api_key,
+    temperature = 0.4,
 )
 
 class State(TypedDict):
@@ -25,12 +29,12 @@ Write an essay based on the outlines below:
 
 async def rate_essay(state: State):
     prompt = f"""
-Rate the essay out of 10.
-Return a number only.
-ESSAY:
-{state['essay']}
-"""
-    res = await llm.ainvoke([HumanMessage(content=prompt)])
+        Rate the essay out of 10.
+        Return a number only.
+        ESSAY:
+        {state['essay']}
+        """
+    res = await llm.ainvoke([HumanMessage(content = prompt)])
     score = int("".join(filter(str.isdigit, res.content)) or 0)
     return {"score": score}
 
