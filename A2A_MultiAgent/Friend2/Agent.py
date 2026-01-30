@@ -5,7 +5,7 @@ from langchain_core.messages import HumanMessage
 
 llm = ChatGoogleGenerativeAI(
     model="Gemini 3 Flash",
-    google_api_key="AIzaSyCgpXQGnJjpVwNHqot4GUa5Ho2n5PcfITc",
+    google_api_key="KEY",
     temperature=0.2,
 )
 
