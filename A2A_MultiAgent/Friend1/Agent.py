@@ -5,7 +5,7 @@ from langchain_core.messages import HumanMessage
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-flash-latest",
-    google_api_key="key",
+    google_api_key="KEY",
     temperature=0.3,
 )
 
@@ -20,7 +20,7 @@ async def research(state: State):
 
 async def rate(state: State):
     res = await llm.ainvoke(
-        [HumanMessage(content=f"Rate this research out of 10. Example(8 out of 10,8/10):\n{state['research']}")]
+        [HumanMessage(content=f"Rate this research out of 10. Return a Number only:\n{state['research']}")]
     )
     score = int("".join(filter(str.isdigit, res.content)) or 0)
     return {"score": score}
