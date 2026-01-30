@@ -10,21 +10,19 @@ from langchain_core.messages import HumanMessage
 from a2a.client import A2AClient, A2ACardResolver
 from a2a.types import SendMessageRequest, MessageSendParams
 
-
 # ==============================
 # Host LLM (only for host work)
 # ==============================
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-flash-latest",
-    google_api_key="key",
+    google_api_key="KEY",
     temperature=0.1,
 )
 
 # ==============================
 # A2A Communication Helper
 # ==============================
-
 
 class A2AHostClient:
     def __init__(self):
@@ -64,22 +62,18 @@ class A2AHostClient:
         except Exception as e:
             return f"[ERROR]: Malformed response: {e}"
 
-
 # ==============================
 # Host LangGraph State
 # ==============================
-
 
 class HostState(TypedDict):
     essay: str
     insights: str
     rating: int
 
-
 # ==============================
 # Host LangGraph Nodes
 # ==============================
-
 
 async def extract_insights(state: HostState):
     prompt = f"""
@@ -91,11 +85,10 @@ ESSAY:
     res = await llm.ainvoke([HumanMessage(content=prompt)])
     return {"insights": res.content}
 
-
 async def rate_insights(state: HostState):
     prompt = f"""
 Rate the quality of these insights out of 10.
-Return a Number only
+Return a number only
 
 INSIGHTS:
 {state['insights']}
@@ -104,11 +97,9 @@ INSIGHTS:
     score = int("".join(filter(str.isdigit, res.content)) or 0)
     return {"rating": score}
 
-
 # ==============================
 # Host LangGraph Brain
 # ==============================
-
 
 class HostBrain:
     def __init__(self):
@@ -126,11 +117,9 @@ class HostBrain:
     async def run(self, essay: str):
         return await self.graph.ainvoke({"essay": essay})
 
-
 # ==============================
 # Host Orchestrator (PIPELINE)
 # ==============================
-
 
 class HostAgent:
     def __init__(self):
@@ -173,7 +162,6 @@ class HostAgent:
         print("========== ✍️ ESSAY OUTPUT ==========\n")
         print(essay)
         print("\n======================================\n")
-
         # ---------------------------
         # STEP 4 → HOST ANALYSIS
         # ---------------------------
@@ -190,11 +178,9 @@ class HostAgent:
 
         return result
 
-
 # ==============================
 # Program Entry
 # ==============================
-
 
 async def main():
     print("\n==============================")
@@ -206,7 +192,6 @@ async def main():
 
     host = HostAgent()
     await host.run(topic)
-
 
 if __name__ == "__main__":
     asyncio.run(main())
