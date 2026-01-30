@@ -1,12 +1,11 @@
 from typing import TypedDict, List
 from langgraph.graph import StateGraph, END
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage
 
-llm = ChatGoogleGenerativeAI(
-    model="Gemini 3 Flash",
-    google_api_key="KEY",
-    temperature=0.2,
+llm = ChatOllama(
+    model = "llama3.1:8b",
+    temperature = 0.3
 )
 
 class State(TypedDict):
@@ -16,10 +15,10 @@ class State(TypedDict):
 
 async def generate_outlines(state: State):
     prompt = f"""
-Analyze the research and produce outlines from it.
-RESEARCH:
-{state['research']}
-"""
+        Analyze the research and produce outlines from it.
+        RESEARCH:
+        {state['research']}
+        """
     res = await llm.ainvoke([HumanMessage(content=prompt)])
 
     lines = [l.strip("-• ") for l in res.content.split("\n") if l.strip()]
