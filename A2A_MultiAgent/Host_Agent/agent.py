@@ -2,22 +2,22 @@ import asyncio
 import uuid
 import httpx
 from typing import TypedDict
-
 from langgraph.graph import StateGraph, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
-
 from a2a.client import A2AClient, A2ACardResolver
 from a2a.types import SendMessageRequest, MessageSendParams
-
+from dotenv import load_dotenv
+import os
 # ==============================
 # Host LLM (only for host work)
 # ==============================
-
+load_dotenv()
+api_key = os.getenv("GOOGLE_API_KEY")
 llm = ChatGoogleGenerativeAI(
-    model="gemini-flash-latest",
-    google_api_key="KEY",
-    temperature=0.1,
+    model = "gemini-flash-latest",
+    google_api_key = api_key,
+    temperature = 0.4,
 )
 
 # ==============================
@@ -35,8 +35,8 @@ class A2AHostClient:
 
     async def send(self, client: A2AClient, text: str) -> str:
         req = SendMessageRequest(
-            id=str(uuid.uuid4()),
-            params=MessageSendParams.model_validate(
+            id = str(uuid.uuid4()),
+            params = MessageSendParams.model_validate(
                 {
                     "message": {
                         "role": "user",
@@ -77,22 +77,22 @@ class HostState(TypedDict):
 
 async def extract_insights(state: HostState):
     prompt = f"""
-Extract the BEST and MOST IMPORTANT insights from this essay.
+        Extract the BEST and MOST IMPORTANT insights from this essay.
 
-ESSAY:
-{state['essay']}
-"""
+        ESSAY:
+        {state['essay']}
+        """
     res = await llm.ainvoke([HumanMessage(content=prompt)])
     return {"insights": res.content}
 
 async def rate_insights(state: HostState):
     prompt = f"""
-Rate the quality of these insights out of 10.
-Return a number only
+        Rate the quality of these insights out of 10.
+        Return a number only
 
-INSIGHTS:
-{state['insights']}
-"""
+        INSIGHTS:
+        {state['insights']}
+        """
     res = await llm.ainvoke([HumanMessage(content=prompt)])
     score = int("".join(filter(str.isdigit, res.content)) or 0)
     return {"rating": score}
